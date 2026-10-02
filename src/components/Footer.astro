@@ -1,0 +1,41 @@
+---
+import { SITE_OWNER } from '../consts';
+
+const today = new Date();
+---
+
+<footer>
+	<p class="disclosure-note">
+		Some links on this site are affiliate links. If you buy through them, I may earn a commission at
+		no extra cost to you.
+	</p>
+	<nav class="footer-links">
+		<a href="/about">About</a>
+		<a href="/privacy">Privacy Policy</a>
+	</nav>
+	<p>&copy; {today.getFullYear()} {SITE_OWNER}. All rights reserved.</p>
+</footer>
+<style>
+	footer {
+		padding: 2em 1em 4em 1em;
+		background: linear-gradient(var(--gray-gradient)) no-repeat;
+		color: rgb(var(--gray));
+		text-align: center;
+	}
+	.disclosure-note {
+		max-width: 640px;
+		margin: 0 auto 1em auto;
+		font-size: 0.85em;
+	}
+	.footer-links {
+		display: flex;
+		justify-content: center;
+		gap: 1.5em;
+	}
+	.footer-links a {
+		color: rgb(var(--gray));
+	}
+	.footer-links a:hover {
+		color: rgb(var(--gray-dark));
+	}
+</style>

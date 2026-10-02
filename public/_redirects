@@ -1,0 +1,3 @@
+# Affiliate links: /go/<name>  <HopLink>  302
+# Use a unique tid per post so ClickBank reports show which post made the sale.
+/go/example-product  https://hop.clickbank.net/?affiliate=YOUR_ID&vendor=VENDOR_ID&tid=example-post  302

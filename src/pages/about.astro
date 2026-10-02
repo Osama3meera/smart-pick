@@ -1,0 +1,22 @@
+---
+import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
+import Layout from '../layouts/BlogPost.astro';
+import { SITE_DESCRIPTION, SITE_OWNER } from '../consts';
+---
+
+<Layout
+	title="About"
+	description={SITE_DESCRIPTION}
+	pubDate={new Date('2026-10-03')}
+	heroImage={AboutHeroImage}
+	affiliate={false}
+>
+	<p>
+		Hi, welcome to {SITE_OWNER}! Write a few lines here about who you are, what this site covers, and
+		why readers can trust your recommendations.
+	</p>
+	<p>
+		Some posts contain affiliate links. If you buy through one, I may earn a commission at no extra
+		cost to you. I only recommend products I believe are worth it.
+	</p>
+</Layout>
