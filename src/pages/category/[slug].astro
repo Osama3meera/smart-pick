@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import PostGrid from '../../components/PostGrid.astro';
+import { CATEGORIES, SITE_TITLE } from '../../consts';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	return CATEGORIES.map((category) => ({
+		params: { slug: category.slug },
+		props: {
+			category,
+			posts: posts
+				.filter((post) => post.data.category === category.slug)
+				.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+		},
+	})).filter(({ props }) => props.posts.length > 0);
+}
+
+const { category, posts } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`${category.name} | ${SITE_TITLE}`} description={category.description} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>{category.name}</h1>
+			<p>{category.description}</p>
+			<PostGrid posts={posts} />
+		</main>
+		<Footer />
+	</body>
+</html>

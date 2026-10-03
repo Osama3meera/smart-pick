@@ -3,6 +3,7 @@ title: 'Example Post: Replace With Your First Article'
 description: 'A short summary of the post. This shows in Google results and when the page is shared.'
 pubDate: '2026-10-03'
 heroImage: '../../assets/blog-placeholder-1.jpg'
+category: 'health-fitness'
 ---
 
 Start with the reader's problem. Pinterest users clicked your pin because of a promise, so deliver on it in the first lines.
