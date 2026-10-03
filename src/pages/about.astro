@@ -1,22 +1,59 @@
 ---
 import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 import Layout from '../layouts/BlogPost.astro';
-import { SITE_DESCRIPTION, SITE_OWNER } from '../consts';
+import { CONTACT_EMAIL, SITE_OWNER } from '../consts';
 ---
 
 <Layout
-	title="About"
-	description={SITE_DESCRIPTION}
+	title="About Smart Pick"
+	description="Smart Pick shares practical guides and honest product picks to help you choose with confidence."
 	pubDate={new Date('2026-10-03')}
 	heroImage={AboutHeroImage}
 	affiliate={false}
 >
 	<p>
-		Hi, welcome to {SITE_OWNER}! Write a few lines here about who you are, what this site covers, and
-		why readers can trust your recommendations.
+		Welcome to {SITE_OWNER}! There are thousands of programs, guides, and products online, and most
+		of them promise the same thing. It is hard to know what is actually worth your time and money.
+		That is why this site exists.
 	</p>
+
+	<h2>What you will find here</h2>
 	<p>
-		Some posts contain affiliate links. If you buy through one, I may earn a commission at no extra
-		cost to you. I only recommend products I believe are worth it.
+		{SITE_OWNER} publishes practical, easy-to-follow articles. We started with health and fitness:
+		home workouts, healthy eating, and building better daily habits. Over time we are adding more
+		topics, such as self-improvement, home and garden, cooking, and more.
+	</p>
+	<p>Every post aims to do three things:</p>
+	<ul>
+		<li>Explain the problem clearly, without hype.</li>
+		<li>Give you useful tips you can use right away, even if you never buy anything.</li>
+		<li>Point you to products that can help, and be honest about who they are and are not for.</li>
+	</ul>
+
+	<h2>How we choose products</h2>
+	<p>
+		We look at what a product actually includes, who it is designed for, what other buyers say, and
+		whether it comes with a fair refund policy. If something makes unrealistic promises, we do not
+		recommend it.
+	</p>
+
+	<h2>How this site makes money</h2>
+	<p>
+		Some links on {SITE_OWNER} are affiliate links. If you click one and make a purchase, we may earn
+		a commission at no extra cost to you. This helps keep the site running and the content free. It
+		never changes the price you pay, and it does not decide what we write about.
+	</p>
+
+	<h2>A note on health content</h2>
+	<p>
+		Our health and fitness articles are for general information only and are not medical advice. We
+		are not doctors. Please talk to a qualified healthcare professional before starting any new
+		diet, supplement, or exercise program, especially if you have a medical condition.
+	</p>
+
+	<h2>Get in touch</h2>
+	<p>
+		Have a question, a suggestion, or a topic you would like us to cover? Email us at
+		<a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. We read every message.
 	</p>
 </Layout>

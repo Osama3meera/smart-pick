@@ -1,7 +1,7 @@
 export const SITE_TITLE = 'Smart Pick';
 export const SITE_DESCRIPTION = 'Honest guides and smart product picks to help you choose with confidence.';
 export const SITE_OWNER = 'Smart Pick';
-export const CONTACT_EMAIL = 'you@example.com';
+export const CONTACT_EMAIL = 'osamahasan3meera@gmail.com';
 
 export const PINTEREST_DOMAIN_VERIFY = '';
 
