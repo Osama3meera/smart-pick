@@ -4,6 +4,7 @@ description: 'An honest look at The Brain Song: what you get, how it claims to w
 pubDate: '2026-10-03'
 heroImage: '../../assets/brain-song-hero.jpg'
 category: 'health-fitness'
+product: 'The Brain Song'
 ---
 
 You walk into a room and forget why. You meet someone and lose their name ten seconds later. You read a page and realise none of it stuck.

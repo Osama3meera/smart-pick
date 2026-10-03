@@ -17,6 +17,13 @@ const blog = defineCollection({
 			heroImage: z.optional(image()),
 			category: z.enum(CATEGORIES.map((category) => category.slug) as [string, ...string[]]),
 			affiliate: z.boolean().default(true),
+			product: z.string().optional(),
+			pins: z
+				.object({
+					hook: z.string().optional(),
+					teaser: z.string().optional(),
+				})
+				.optional(),
 		}),
 });
 

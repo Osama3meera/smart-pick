@@ -1,63 +1,47 @@
-# Astro Starter Kit: Blog
+# Smart Pick
 
-```sh
-npm create astro@latest -- --template blog
+Affiliate blog built with Astro and hosted on Cloudflare Pages: https://smart-pick.pages.dev
+
+Every push to `main` deploys automatically.
+
+## Commands
+
+| Command | What it does |
+| :-- | :-- |
+| `npm run dev` | Preview the site at http://localhost:4321 |
+| `npm run build` | Build the site into `dist/` |
+| `npm run pins <post-name>` | Create 4 Pinterest pins for a post |
+| `npm run pins` | Create pins for every post |
+
+## Adding a product
+
+1. Add the HopLink to `public/_redirects`: `/go/<name>  <hoplink>?tid=<post-name>  302`
+2. Create `src/content/blog/<post-name>.md` with `title`, `description`, `pubDate`, `heroImage`, `category`, and `product`.
+3. In the post, link to `/go/<name>` and include:
+   - a quick verdict box (`<div class="verdict">` with `<li><strong>Label:</strong> value</li>` items, including `Price:`)
+   - one numbered list of 3 or more tips
+   - a "who it is not for" section
+4. Run `npm run pins <post-name>`.
+5. `git add . && git commit -m "..." && git push`
+
+## Pins
+
+`npm run pins <post-name>` writes to `pins/<product-name>/`:
+
+| File | Design | Built from |
+| :-- | :-- | :-- |
+| `1.jpg` | Question hook | Part of the title after the `:` |
+| `2.jpg` | List teaser (3 shown, rest hidden) | First numbered list and the heading above it |
+| `3.jpg` | "Is it worth $X?" | Quick verdict box |
+| `4.jpg` | "Before you buy... read this" | Product name |
+| `pins.md` | Title, description, link with UTM, board, posting dates | All of the above |
+
+Optional overrides in the post frontmatter:
+
+```yaml
+pins:
+  hook: 'Custom text for pin 1'
+  teaser: 'Custom subtitle for pin 4'
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-Features:
-
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and Open Graph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-├── public/
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+Colors come from the post category (see `THEMES` in `scripts/pins.mjs`).
