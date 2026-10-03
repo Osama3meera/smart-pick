@@ -18,7 +18,12 @@ const categoryInfo = category ? getCategory(category) : undefined;
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} image={heroImage} />
+		<BaseHead
+			title={title}
+			description={description}
+			image={heroImage}
+			publishedTime={category ? pubDate : undefined}
+		/>
 		<style>
 			main {
 				width: calc(100% - 2em);

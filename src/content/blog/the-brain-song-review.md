@@ -10,6 +10,18 @@ You walk into a room and forget why. You meet someone and lose their name ten se
 
 If that sounds familiar, you are not alone, and you have probably seen ads for **The Brain Song**, a short audio track that promises to support focus and memory. In this post we look at what it actually is, what it claims, what the research does and does not say, and the free habits that make the biggest difference to your memory.
 
+<div class="verdict">
+<h2>Quick verdict</h2>
+<ul>
+<li><strong>What it is:</strong> a 12-minute daily audio track (no pills)</li>
+<li><strong>Price:</strong> $39, one-time digital download</li>
+<li><strong>Guarantee:</strong> 90-day money-back</li>
+<li><strong>Best for:</strong> people who want an easy, relaxing daily focus habit</li>
+<li><strong>Keep in mind:</strong> the science is promising but still early</li>
+</ul>
+<a class="cta" href="/go/brain-song" rel="sponsored nofollow">Check the current price →</a>
+</div>
+
 ## What is The Brain Song?
 
 The Brain Song is a **digital audio program**. It is not a pill or a supplement. Here is what the official site says you get:
