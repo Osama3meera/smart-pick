@@ -43,23 +43,23 @@ Upload one pin every 3 days (suggested dates below) using Pinterest's scheduler.
 
 **Description:** Not sure if The Brain Song is a good fit? See who it is made for and who should skip it before you decide. #affiliate #healthyhabits #wellness #fitnesstips #selfcare
 
-**Link:** https://smart-pick.pages.dev/blog/the-brain-song-review/?utm_source=pinterest&utm_medium=pin&utm_campaign=the-brain-song-review-pin5
+**Link:** https://smart-pick.pages.dev/blog/improve-memory-naturally/?utm_source=pinterest&utm_medium=pin&utm_campaign=improve-memory-naturally-pin5
 
 ## Pin 6 (6.jpg) - post on 2026-10-07
 
-**Title:** Protect Your Sleep: 6 Free Habits that Support a Sharper Memory
+**Title:** Teach What You Learn: 7 Simple Ways to Improve Your Memory
 
-**Description:** "Protect your sleep" is just one of 6 simple tips. Get the full list in our guide and save this pin for later! #affiliate #healthyhabits #wellness #fitnesstips #selfcare
+**Description:** "Teach what you learn" is just one of 7 simple tips. Get the full list in our guide and save this pin for later! #affiliate #healthyhabits #wellness #fitnesstips #selfcare
 
-**Link:** https://smart-pick.pages.dev/blog/the-brain-song-review/?utm_source=pinterest&utm_medium=pin&utm_campaign=the-brain-song-review-pin6
+**Link:** https://smart-pick.pages.dev/blog/improve-memory-naturally/?utm_source=pinterest&utm_medium=pin&utm_campaign=improve-memory-naturally-pin6
 
 ## Pin 7 (7.jpg) - post on 2026-10-10
 
-**Title:** 4 Questions to Ask Before Buying The Brain Song
+**Title:** 3 Questions to Ask Before Buying The Brain Song
 
-**Description:** What is The Brain Song? How does it claim to work? We answer these and more in our honest review. #affiliate #healthyhabits #wellness #fitnesstips #selfcare
+**Description:** Do you need a product to improve your memory? Can sound really change your brainwaves? We answer these and more in our honest review. #affiliate #healthyhabits #wellness #fitnesstips #selfcare
 
-**Link:** https://smart-pick.pages.dev/blog/the-brain-song-review/?utm_source=pinterest&utm_medium=pin&utm_campaign=the-brain-song-review-pin7
+**Link:** https://smart-pick.pages.dev/blog/improve-memory-naturally/?utm_source=pinterest&utm_medium=pin&utm_campaign=improve-memory-naturally-pin7
 
 ## Pin 8 (8.jpg) - post on 2026-10-13
 
@@ -67,4 +67,4 @@ Upload one pin every 3 days (suggested dates below) using Pinterest's scheduler.
 
 **Description:** We checked what The Brain Song claims against what the research actually says. See what we found before you buy. #affiliate #healthyhabits #wellness #fitnesstips #selfcare
 
-**Link:** https://smart-pick.pages.dev/blog/the-brain-song-review/?utm_source=pinterest&utm_medium=pin&utm_campaign=the-brain-song-review-pin8
+**Link:** https://smart-pick.pages.dev/blog/improve-memory-naturally/?utm_source=pinterest&utm_medium=pin&utm_campaign=improve-memory-naturally-pin8

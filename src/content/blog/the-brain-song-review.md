@@ -77,6 +77,8 @@ Whether or not you try The Brain Song, these habits are backed by solid research
 5. **Manage stress.** Long-term stress hurts memory. Even five minutes of slow breathing helps.
 6. **Keep learning.** A new language, instrument, or skill keeps your brain building new connections.
 
+Want even more? See our guide to [7 simple ways to improve your memory naturally](/blog/improve-memory-naturally/).
+
 Listening to a 12-minute track can sit nicely alongside these habits. For example, you could use it as a calm break after a walk or before studying.
 
 ## Final verdict

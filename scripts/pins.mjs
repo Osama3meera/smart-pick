@@ -312,21 +312,36 @@ ${ctaLight(`Get all ${items.length} tips →`, theme)}`,
 }
 
 function pinQuestions(post, theme) {
-	const qs = post.questions.slice(0, 4);
-	const title = fit(`${qs.length} Questions to Ask Before You Buy ${post.product.replace(/ /g, ' ')}`, { size: 84, minSize: 56, maxLines: 4 });
+	let qs = post.questions.slice(0, 4);
+	let size = 44;
+	const rowsHeight = (list, sz) =>
+		list.reduce((h, q) => h + 140 + (wrap(q, sz, 640, true).slice(0, 2).length - 1) * sz * 1.22, 0);
+	const titleFor = (n) => fit(`${n} Questions to Ask Before You Buy ${post.product.replace(/ /g, '\u00a0')}`, { size: 84, minSize: 56, maxLines: 4 });
+	let title = titleFor(qs.length);
+	const top = () => 280 + (title.lines.length - 1) * title.size * 1.15 + 140;
+	while (top() + rowsHeight(qs, size) > 1230) {
+		if (size > 36) size -= 2;
+		else if (qs.length > 3) {
+			qs = qs.slice(0, 3);
+			size = 44;
+			title = titleFor(qs.length);
+		} else break;
+	}
 	const block = textBlock(title.lines, { y: 280, size: title.size, fill: theme.bg1 });
 	let y = block.bottom + 140;
 	const rows = qs.map((q, i) => {
-		const lines = wrap(q, 44, 640, true).slice(0, 2);
-		const row = `<rect x="90" y="${y - 62}" width="820" height="${110 + (lines.length - 1) * 54}" rx="20" fill="#ffffff" stroke="${theme.bg2}" stroke-opacity="0.25" stroke-width="3"/>
+		const lines = wrap(q, size, 640, true).slice(0, 2);
+		const extra = (lines.length - 1) * size * 1.22;
+		const row = `<rect x="90" y="${y - 62}" width="820" height="${110 + extra}" rx="20" fill="#ffffff" stroke="${theme.bg2}" stroke-opacity="0.25" stroke-width="3"/>
 <text x="150" y="${y + 6}" text-anchor="middle" font-family="${FONT}" font-size="50" font-weight="700" fill="${theme.bg2}">${i + 1}</text>
-${textBlock(lines, { x: 210, y: y + 4, size: 44, fill: theme.bg1, anchor: 'start', lineHeight: 1.2 }).svg}`;
-		y += 140 + (lines.length - 1) * 54;
+${textBlock(lines, { x: 210, y: y + 4, size, fill: theme.bg1, anchor: 'start', lineHeight: 1.22 }).svg}`;
+		y += 140 + extra;
 		return row;
 	});
+	post.questionCount = qs.length;
 	return frameLight(
 		theme,
-		`${kickerLight('Answered in our review', theme)}
+		`${kickerLight('Answered inside', theme)}
 ${block.svg}
 ${rows.join('\n')}
 ${ctaLight('Get the answers →', theme)}`,
@@ -473,7 +488,7 @@ function pinCopy(post, n) {
 				: post.description,
 		},
 		questions: {
-			title: `${post.questions.length} Questions to Ask Before Buying ${post.product}`,
+			title: `${post.questionCount || post.questions.length} Questions to Ask Before Buying ${post.product}`,
 			description: `${post.questions.slice(0, 2).join(' ')} We answer these and more in our honest review.`,
 		},
 		truth: {
