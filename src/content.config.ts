@@ -22,6 +22,7 @@ const blog = defineCollection({
 				.object({
 					hook: z.string().optional(),
 					teaser: z.string().optional(),
+					truth: z.string().optional(),
 				})
 				.optional(),
 		}),

@@ -36,3 +36,35 @@ Upload one pin every 3 days (suggested dates below) using Pinterest's scheduler.
 **Description:** An honest look at The Brain Song: what you get, how it claims to work, what the science actually says, and simple daily habits that support a sharper memory. Read the honest review first so you know exactly what to expect. #affiliate #healthyhabits #wellness #fitnesstips #selfcare
 
 **Link:** https://smart-pick.pages.dev/blog/the-brain-song-review/?utm_source=pinterest&utm_medium=pin&utm_campaign=the-brain-song-review-pin4
+
+## Pin 5 (5.jpg) - post on 2026-10-04
+
+**Title:** Is The Brain Song Right for You? Quick Check
+
+**Description:** Not sure if The Brain Song is a good fit? See who it is made for and who should skip it before you decide. #affiliate #healthyhabits #wellness #fitnesstips #selfcare
+
+**Link:** https://smart-pick.pages.dev/blog/the-brain-song-review/?utm_source=pinterest&utm_medium=pin&utm_campaign=the-brain-song-review-pin5
+
+## Pin 6 (6.jpg) - post on 2026-10-07
+
+**Title:** Protect Your Sleep: 6 Free Habits that Support a Sharper Memory
+
+**Description:** "Protect your sleep" is just one of 6 simple tips. Get the full list in our guide and save this pin for later! #affiliate #healthyhabits #wellness #fitnesstips #selfcare
+
+**Link:** https://smart-pick.pages.dev/blog/the-brain-song-review/?utm_source=pinterest&utm_medium=pin&utm_campaign=the-brain-song-review-pin6
+
+## Pin 7 (7.jpg) - post on 2026-10-10
+
+**Title:** 4 Questions to Ask Before Buying The Brain Song
+
+**Description:** What is The Brain Song? How does it claim to work? We answer these and more in our honest review. #affiliate #healthyhabits #wellness #fitnesstips #selfcare
+
+**Link:** https://smart-pick.pages.dev/blog/the-brain-song-review/?utm_source=pinterest&utm_medium=pin&utm_campaign=the-brain-song-review-pin7
+
+## Pin 8 (8.jpg) - post on 2026-10-13
+
+**Title:** The Truth About The Brain Song: Honest Review
+
+**Description:** We checked what The Brain Song claims against what the research actually says. See what we found before you buy. #affiliate #healthyhabits #wellness #fitnesstips #selfcare
+
+**Link:** https://smart-pick.pages.dev/blog/the-brain-song-review/?utm_source=pinterest&utm_medium=pin&utm_campaign=the-brain-song-review-pin8
