@@ -492,7 +492,7 @@ function pinCopy(post, n) {
 			description: `${post.questions.slice(0, 2).join(' ')} We answer these and more in our honest review.`,
 		},
 		truth: {
-			title: `The Truth About ${post.product}: Honest Review`,
+			title: `The Truth About ${post.product}: What We Found`,
 			description: `We checked what ${post.product} claims against what the research actually says. See what we found before you buy.`,
 		},
 	};
