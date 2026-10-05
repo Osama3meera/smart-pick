@@ -53,3 +53,21 @@ pins:
 ```
 
 Colors come from the post category (see `THEMES` in `scripts/pins.mjs`).
+
+## Videos
+
+`npm run video video-scripts/<name>.md` turns a script into a vertical 1080x1920 MP4 with a voiceover, and adds a "Follow / Link in the first comment" end screen automatically.
+
+Script format:
+
+```md
+---
+post: the-brain-song-review
+voice: en-US-AndrewNeural
+---
+First scene text (shown on screen and spoken)
+
+Short on-screen text || Longer sentence the voice says
+```
+
+Each blank-line-separated paragraph is one scene. Output goes to `videos/<product-name>/`: `<n>.mp4`, `<n>-cover.jpg`, and `<n>.md` (title, description, first-comment text with the tracked link). MP4 files are not committed to git.

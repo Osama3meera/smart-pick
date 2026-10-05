@@ -1,18 +1,19 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
 import sharp from 'sharp';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const BLOG_DIR = path.join(ROOT, 'src/content/blog');
 const PINS_DIR = path.join(ROOT, 'pins');
-const SITE_URL = 'https://smart-pick.pages.dev';
-const SITE_LABEL = 'smart-pick.pages.dev';
+export const SITE_URL = 'https://smart-pick.pages.dev';
+export const SITE_LABEL = 'smart-pick.pages.dev';
 const W = 1000;
 const H = 1500;
-const FONT = 'Arial, Helvetica, sans-serif';
+export const FONT = 'Arial, Helvetica, sans-serif';
 
-const THEMES = {
+export const THEMES = {
 	'health-fitness': { bg1: '#1e1b4b', bg2: '#4338ca', accent: '#fde68a', soft: '#c7d2fe', ink: '#1e1b4b' },
 	'self-help': { bg1: '#3b0764', bg2: '#9333ea', accent: '#fcd34d', soft: '#e9d5ff', ink: '#3b0764' },
 	'home-garden': { bg1: '#14532d', bg2: '#16a34a', accent: '#fef08a', soft: '#bbf7d0', ink: '#14532d' },
@@ -23,7 +24,7 @@ const THEMES = {
 	spirituality: { bg1: '#134e4a', bg2: '#0d9488', accent: '#fef08a', soft: '#99f6e4', ink: '#134e4a' },
 };
 
-const BOARDS = {
+export const BOARDS = {
 	'health-fitness': 'Health & Fitness Tips',
 	'self-help': 'Self-Improvement',
 	'home-garden': 'Home & Garden Ideas',
@@ -34,7 +35,7 @@ const BOARDS = {
 	spirituality: 'Mindfulness & Spirituality',
 };
 
-const HASHTAGS = {
+export const HASHTAGS = {
 	'health-fitness': '#healthyhabits #wellness #fitnesstips #selfcare',
 	'self-help': '#selfimprovement #personalgrowth #motivation #habits',
 	'home-garden': '#homeideas #gardening #diyhome #homeimprovement',
@@ -45,7 +46,7 @@ const HASHTAGS = {
 	spirituality: '#mindfulness #meditation #spirituality #innerpeace',
 };
 
-function slugify(text) {
+export function slugify(text) {
 	return text
 		.toLowerCase()
 		.replace(/&/g, ' and ')
@@ -53,7 +54,7 @@ function slugify(text) {
 		.replace(/^-+|-+$/g, '');
 }
 
-function esc(text) {
+export function esc(text) {
 	return String(text)
 		.replace(/&/g, '&amp;')
 		.replace(/</g, '&lt;')
@@ -70,11 +71,11 @@ function charWidth(ch, bold) {
 	return bold ? 0.58 : 0.54;
 }
 
-function textWidth(text, size, bold) {
+export function textWidth(text, size, bold) {
 	return [...text].reduce((sum, ch) => sum + charWidth(ch, bold), 0) * size;
 }
 
-function wrap(text, size, maxWidth, bold) {
+export function wrap(text, size, maxWidth, bold) {
 	const words = text.split(/[ \t\n]+/).filter(Boolean);
 	const lines = [];
 	let line = '';
@@ -101,7 +102,7 @@ function balance(lines, size, maxWidth, bold) {
 	return [...lines.slice(0, last - 1), prev.join(' '), moved];
 }
 
-function fit(text, { size, minSize = 40, maxWidth = 840, maxLines = 4, bold = true }) {
+export function fit(text, { size, minSize = 40, maxWidth = 840, maxLines = 4, bold = true }) {
 	for (let s = size; s >= minSize; s -= 4) {
 		const lines = wrap(text, s, maxWidth, bold);
 		if (lines.length <= maxLines && lines.every((l) => textWidth(l, s, bold) <= maxWidth)) {
@@ -111,7 +112,7 @@ function fit(text, { size, minSize = 40, maxWidth = 840, maxLines = 4, bold = tr
 	return { lines: wrap(text, minSize, maxWidth, bold).slice(0, maxLines), size: minSize };
 }
 
-function textBlock(lines, { x = W / 2, y, size, fill, bold = true, anchor = 'middle', lineHeight = 1.15 }) {
+export function textBlock(lines, { x = W / 2, y, size, fill, bold = true, anchor = 'middle', lineHeight = 1.15 }) {
 	const spans = lines
 		.map((line, i) => `<tspan x="${x}" dy="${i === 0 ? 0 : size * lineHeight}">${esc(line)}</tspan>`)
 		.join('');
@@ -373,7 +374,7 @@ function cleanItem(raw) {
 	return text.trim().replace(/[.:]+$/, '');
 }
 
-function titleCase(text) {
+export function titleCase(text) {
 	const small = new Set(['a', 'an', 'the', 'and', 'or', 'for', 'to', 'of', 'in', 'on', 'at', 'by', 'that']);
 	return text
 		.split(' ')
@@ -430,7 +431,7 @@ function parseFit(body) {
 	return lists.length ? { yes: lists[0], no: lists[1] || [] } : null;
 }
 
-function loadPost(slug) {
+export function loadPost(slug) {
 	const file = ['.md', '.mdx'].map((ext) => path.join(BLOG_DIR, slug + ext)).find((f) => fs.existsSync(f));
 	if (!file) throw new Error(`Post not found: src/content/blog/${slug}.md`);
 	const { data, content } = matter(fs.readFileSync(file, 'utf8'));
@@ -597,18 +598,22 @@ async function generate(slug, setArg) {
 	if (setNumber === 2 && !post.fit) console.log('  (no "Who is it for" section found, used a fallback design)');
 }
 
-const args = process.argv.slice(2);
-const setIndex = args.indexOf('--set');
-const setArg = setIndex >= 0 ? Number(args.splice(setIndex, 2)[1]) : undefined;
-const slugs = args.length
-	? args
-	: fs.readdirSync(BLOG_DIR).filter((f) => /\.mdx?$/.test(f)).map((f) => f.replace(/\.mdx?$/, ''));
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
-for (const slug of slugs) {
-	try {
-		await generate(slug, setArg);
-	} catch (err) {
-		console.error(`✖ ${slug}: ${err.message}`);
-		process.exitCode = 1;
+if (isMain) {
+	const args = process.argv.slice(2);
+	const setIndex = args.indexOf('--set');
+	const setArg = setIndex >= 0 ? Number(args.splice(setIndex, 2)[1]) : undefined;
+	const slugs = args.length
+		? args
+		: fs.readdirSync(BLOG_DIR).filter((f) => /\.mdx?$/.test(f)).map((f) => f.replace(/\.mdx?$/, ''));
+
+	for (const slug of slugs) {
+		try {
+			await generate(slug, setArg);
+		} catch (err) {
+			console.error(`✖ ${slug}: ${err.message}`);
+			process.exitCode = 1;
+		}
 	}
 }
