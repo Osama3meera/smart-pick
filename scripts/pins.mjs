@@ -271,7 +271,9 @@ function pinFit(post, theme) {
 	const block = textBlock(title.lines, { y: 290, size: title.size, fill: theme.bg1 });
 	let y = block.bottom + 150;
 	const rows = post.fit.yes.slice(0, 2).map((item) => {
-		const lines = wrap(`You ${item.charAt(0).toLowerCase()}${item.slice(1)}`, 42, 660, false).slice(0, 2);
+		const all = wrap(`You ${item.charAt(0).toLowerCase()}${item.slice(1)}`, 42, 660, false);
+		if (all.length > 2) console.warn(`  ⚠ "Who is it for" line too long for pin, shorten it: ${item}`);
+		const lines = all.slice(0, 2);
 		const row = `<circle cx="150" cy="${y - 14}" r="32" fill="#16a34a"/>
 <path d="M135 ${y - 14}l10 10 19-21" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
 ${textBlock(lines, { x: 215, y, size: 42, fill: theme.bg1, bold: false, anchor: 'start', lineHeight: 1.25 }).svg}`;

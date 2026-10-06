@@ -36,3 +36,35 @@ Upload one pin every 3 days (suggested dates below) using Pinterest's scheduler.
 **Description:** An honest look at ProDentim: what is inside, what it claims, what the research on oral probiotics actually says, the real price, and 7 free habits for healthier teeth and gums. Read the honest review first so you know exactly what to expect. #affiliate #healthyhabits #wellness #fitnesstips #selfcare
 
 **Link:** https://smart-pick.pages.dev/blog/prodentim-review/?utm_source=pinterest&utm_medium=pin&utm_campaign=prodentim-review-pin4
+
+## Pin 5 (5.jpg) - post on 2026-10-06
+
+**Title:** Is ProDentim Right for You? Quick Check
+
+**Description:** Not sure if ProDentim is a good fit? See who it is made for and who should skip it before you decide. #affiliate #healthyhabits #wellness #fitnesstips #selfcare
+
+**Link:** https://smart-pick.pages.dev/blog/bad-breath-naturally/?utm_source=pinterest&utm_medium=pin&utm_campaign=bad-breath-naturally-pin5
+
+## Pin 6 (6.jpg) - post on 2026-10-09
+
+**Title:** Floss Every Day: 7 Ways to Get Rid of Bad Breath Naturally
+
+**Description:** "Floss every day" is just one of 7 simple tips. Get the full list in our guide and save this pin for later! #affiliate #healthyhabits #wellness #fitnesstips #selfcare
+
+**Link:** https://smart-pick.pages.dev/blog/bad-breath-naturally/?utm_source=pinterest&utm_medium=pin&utm_campaign=bad-breath-naturally-pin6
+
+## Pin 7 (7.jpg) - post on 2026-10-12
+
+**Title:** 4 Questions to Ask Before Buying ProDentim
+
+**Description:** What causes bad breath? Does mouthwash fix bad breath? We answer these and more in our honest review. #affiliate #healthyhabits #wellness #fitnesstips #selfcare
+
+**Link:** https://smart-pick.pages.dev/blog/bad-breath-naturally/?utm_source=pinterest&utm_medium=pin&utm_campaign=bad-breath-naturally-pin7
+
+## Pin 8 (8.jpg) - post on 2026-10-15
+
+**Title:** The Truth About ProDentim: What We Found
+
+**Description:** We checked what ProDentim claims against what the research actually says. See what we found before you buy. #affiliate #healthyhabits #wellness #fitnesstips #selfcare
+
+**Link:** https://smart-pick.pages.dev/blog/bad-breath-naturally/?utm_source=pinterest&utm_medium=pin&utm_campaign=bad-breath-naturally-pin8

@@ -87,6 +87,8 @@ Whether or not you try ProDentim, these habits make the biggest difference:
 6. **Replace your toothbrush every three months.** Worn bristles clean much less well.
 7. **See your dentist regularly.** Small problems are cheaper and easier to fix early.
 
+Struggling with bad breath? See our guide to [7 ways to get rid of bad breath naturally](/blog/bad-breath-naturally/).
+
 ## Final verdict
 
 **ProDentim** is a simple chewable probiotic for people who want an extra daily step for their oral health. The research on oral probiotics is promising but still limited, so go in with realistic expectations, and keep brushing, flossing, and visiting your dentist. Thanks to the 60-day money-back guarantee, you can try it and judge for yourself.
