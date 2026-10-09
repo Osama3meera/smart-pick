@@ -5,6 +5,7 @@ pubDate: '2026-10-06'
 heroImage: '../../assets/bad-breath-hero.jpg'
 category: 'health-fitness'
 product: 'ProDentim'
+tags: ['Bad breath remedies', 'Fresh breath', 'Oral hygiene', 'Dental care tips', 'Healthy teeth']
 pins:
   truth: 'Plus 7 free habits that freshen your breath, no purchase needed.'
 ---

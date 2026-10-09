@@ -5,6 +5,7 @@ pubDate: '2026-10-03'
 heroImage: '../../assets/brain-song-hero.jpg'
 category: 'health-fitness'
 product: 'The Brain Song'
+tags: ['Memory improvement', 'Brain health', 'Focus and concentration', 'Mental clarity', 'Brain power']
 ---
 
 You walk into a room and forget why. You meet someone and lose their name ten seconds later. You read a page and realise none of it stuck.

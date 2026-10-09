@@ -5,6 +5,7 @@ pubDate: '2026-10-04'
 heroImage: '../../assets/improve-memory-hero.jpg'
 category: 'health-fitness'
 product: 'The Brain Song'
+tags: ['Memory tips', 'Memory improvement', 'Brain health', 'Study tips', 'Learning tips']
 pins:
   truth: 'Plus 7 free habits that sharpen your memory, no purchase needed.'
 ---

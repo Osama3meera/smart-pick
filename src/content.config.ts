@@ -18,6 +18,7 @@ const blog = defineCollection({
 			category: z.enum(CATEGORIES.map((category) => category.slug) as [string, ...string[]]),
 			affiliate: z.boolean().default(true),
 			product: z.string().optional(),
+			tags: z.array(z.string()).optional(),
 			pins: z
 				.object({
 					hook: z.string().optional(),

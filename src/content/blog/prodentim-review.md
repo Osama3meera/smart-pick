@@ -5,6 +5,7 @@ pubDate: '2026-10-06'
 heroImage: '../../assets/prodentim-hero.jpg'
 category: 'health-fitness'
 product: 'ProDentim'
+tags: ['Oral health', 'Dental care', 'Healthy teeth', 'Gum health', 'Probiotics']
 ---
 
 Bad breath that comes back an hour after brushing. Gums that bleed when you floss. A dentist bill you did not see coming.

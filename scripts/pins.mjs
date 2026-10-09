@@ -35,6 +35,17 @@ export const BOARDS = {
 	spirituality: 'Mindfulness & Spirituality',
 };
 
+export const TAGS = {
+	'health-fitness': ['Health and wellness', 'Healthy habits', 'Self care', 'Wellness tips'],
+	'self-help': ['Self improvement', 'Personal growth', 'Motivation', 'Productivity'],
+	'home-garden': ['Home improvement', 'Gardening', 'DIY home', 'Home ideas'],
+	'cooking-food': ['Easy recipes', 'Cooking tips', 'Healthy recipes', 'Meal ideas'],
+	relationships: ['Relationship advice', 'Love', 'Marriage', 'Dating tips'],
+	'parenting-family': ['Parenting tips', 'Family', 'Motherhood', 'Parenting'],
+	pets: ['Pet care', 'Dog care', 'Pet tips', 'Pets'],
+	spirituality: ['Mindfulness', 'Meditation', 'Spirituality', 'Inner peace'],
+};
+
 export const HASHTAGS = {
 	'health-fitness': '#healthyhabits #wellness #fitnesstips #selfcare',
 	'self-help': '#selfimprovement #personalgrowth #motivation #habits',
@@ -449,6 +460,7 @@ export function loadPost(slug) {
 		product,
 		hookTitle,
 		pins: data.pins || {},
+		tags: data.tags || [],
 		list: parseList(content),
 		questions: parseQuestions(content),
 		fit: parseFit(content),
@@ -504,7 +516,15 @@ function pinCopy(post, n) {
 		title: c.title.slice(0, 100),
 		description: `${c.description} #affiliate ${tags}`.trim().slice(0, 500),
 		link,
+		tags: pinTags(post),
 	};
+}
+
+export function pinTags(post) {
+	const seen = new Set();
+	return [...post.tags, ...(TAGS[post.category] || [])]
+		.filter((tag) => !seen.has(tag.toLowerCase()) && seen.add(tag.toLowerCase()))
+		.slice(0, 10);
 }
 
 function schedule(offset) {
@@ -579,6 +599,8 @@ async function generate(slug, setArg) {
 			`**Description:** ${c.description}`,
 			'',
 			`**Link:** ${c.link}`,
+			'',
+			`**Tags:** ${c.tags.join(', ')}`,
 			'',
 		];
 	});
