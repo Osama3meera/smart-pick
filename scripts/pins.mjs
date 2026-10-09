@@ -57,6 +57,8 @@ export const HASHTAGS = {
 	spirituality: '#mindfulness #meditation #spirituality #innerpeace',
 };
 
+const keep = (text) => text.replace(/ /g, String.fromCharCode(160));
+
 export function slugify(text) {
 	return text
 		.toLowerCase()
@@ -212,7 +214,7 @@ ${ctaButton(`See all ${items.length} →`, theme)}`,
 }
 
 function pinVerdict(post, theme) {
-	const question = post.price ? `Is ${post.product} Worth ${post.price}?` : `Is ${post.product} Worth It?`;
+	const question = post.price ? `Is ${keep(post.product)} Worth ${post.price}?` : `Is ${keep(post.product)} Worth It?`;
 	const title = fit(question, { size: 100, minSize: 62, maxLines: 4 });
 	const block = textBlock(title.lines, { y: 330, size: title.size, fill: '#ffffff' });
 	const facts = post.facts.filter((f) => !/keep in mind|best for/i.test(f.label)).slice(0, 3);
@@ -241,7 +243,7 @@ ${ctaButton('Get the full verdict →', theme)}`,
 }
 
 function pinWarning(post, theme) {
-	const title = fit(`Before You Buy ${post.product}… Read This`, { size: 108, minSize: 66, maxLines: 5 });
+	const title = fit(`Before You Buy ${keep(post.product)}… Read This`, { size: 108, minSize: 66, maxLines: 5 });
 	const block = textBlock(title.lines, { y: 420, size: title.size, fill: '#ffffff' });
 	const teaser = post.pins.teaser || 'What you really get, what the science says, and who should skip it';
 	const sub = fit(teaser, { size: 48, minSize: 34, maxLines: 4, bold: false, maxWidth: 780 });
