@@ -5,6 +5,7 @@ pubDate: '2026-10-09'
 heroImage: '../../assets/phytomem-hero.jpg'
 category: 'health-fitness'
 product: 'Phytomem One'
+pinTheme: 'orange'
 tags: ['Memory loss', 'Brain fog', 'Healthy aging', 'Brain health', 'Memory improvement']
 ---
 

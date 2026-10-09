@@ -19,6 +19,7 @@ const blog = defineCollection({
 			affiliate: z.boolean().default(true),
 			product: z.string().optional(),
 			tags: z.array(z.string()).optional(),
+			pinTheme: z.string().optional(),
 			pins: z
 				.object({
 					hook: z.string().optional(),

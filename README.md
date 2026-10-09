@@ -52,7 +52,7 @@ pins:
   truth: 'Custom subtitle for pin 8'
 ```
 
-Colors come from the post category (see `THEMES` in `scripts/pins.mjs`).
+Colors come from the post category (see `THEMES` in `scripts/pins.mjs`). Override per post with `pinTheme: 'orange'` (or any other key in `THEMES`). Add `tags: [...]` to a post to set its Pinterest tags; category tags are added automatically (max 10).
 
 ## Videos
 

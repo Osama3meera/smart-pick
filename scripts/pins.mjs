@@ -22,6 +22,7 @@ export const THEMES = {
 	'parenting-family': { bg1: '#0c4a6e', bg2: '#0284c7', accent: '#fde68a', soft: '#bae6fd', ink: '#0c4a6e' },
 	pets: { bg1: '#78350f', bg2: '#d97706', accent: '#ffffff', soft: '#fde68a', ink: '#78350f' },
 	spirituality: { bg1: '#134e4a', bg2: '#0d9488', accent: '#fef08a', soft: '#99f6e4', ink: '#134e4a' },
+	orange: { bg1: '#3b1803', bg2: '#d06808', accent: '#fff1dc', soft: '#fcd9b0', ink: '#3b1803' },
 };
 
 export const BOARDS = {
@@ -118,7 +119,8 @@ function balance(lines, size, maxWidth, bold) {
 export function fit(text, { size, minSize = 40, maxWidth = 840, maxLines = 4, bold = true }) {
 	for (let s = size; s >= minSize; s -= 4) {
 		const lines = wrap(text, s, maxWidth, bold);
-		if (lines.length <= maxLines && lines.every((l) => textWidth(l, s, bold) <= maxWidth)) {
+		const orphanStart = lines.length > 1 && !lines[0].includes(" ") && s > minSize;
+		if (!orphanStart && lines.length <= maxLines && lines.every((l) => textWidth(l, s, bold) <= maxWidth)) {
 			return { lines, size: s };
 		}
 	}
@@ -280,7 +282,7 @@ function ctaLight(text, theme, y = 1250) {
 }
 
 function pinFit(post, theme) {
-	const title = fit(`Is ${post.product} Right for You?`, { size: 100, minSize: 62, maxLines: 4 });
+	const title = fit(`Is ${keep(post.product)} Right for You?`, { size: 100, minSize: 62, maxLines: 4 });
 	const block = textBlock(title.lines, { y: 290, size: title.size, fill: theme.bg1 });
 	let y = block.bottom + 150;
 	const rows = post.fit.yes.slice(0, 2).map((item) => {
@@ -463,6 +465,7 @@ export function loadPost(slug) {
 		hookTitle,
 		pins: data.pins || {},
 		tags: data.tags || [],
+		pinTheme: data.pinTheme,
 		list: parseList(content),
 		questions: parseQuestions(content),
 		fit: parseFit(content),
@@ -560,7 +563,7 @@ function existingCount(dir) {
 
 async function generate(slug, setArg) {
 	const post = loadPost(slug);
-	const theme = THEMES[post.category] || THEMES['health-fitness'];
+	const theme = THEMES[post.pinTheme] || THEMES[post.category] || THEMES['health-fitness'];
 	const outDir = path.join(PINS_DIR, slugify(post.product));
 	const sets = designSets(post);
 	const setNumber = setArg || Math.floor(existingCount(outDir) / 4) + 1;
