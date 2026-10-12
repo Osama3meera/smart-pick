@@ -385,6 +385,525 @@ ${ctaLight('Read what we found →', theme)}`,
 	);
 }
 
+function fitw(label, text, opts) {
+	const res = fit(text, opts);
+	const { maxWidth = 840, maxLines = 4, bold = true } = opts;
+	if (text && wrap(text, res.size, maxWidth, bold).length > maxLines) {
+		console.warn(`  ⚠ ${label} is too long for the pin, shorten it: ${text.slice(0, 70)}`);
+	}
+	return res;
+}
+
+function skin(style, theme) {
+	const looks = {
+		dark: { fg: '#ffffff', kicker: theme.soft, hi: theme.accent, accent: theme.accent, onAccent: theme.ink, ctaFill: theme.accent, ctaText: theme.ink, cardFill: '#ffffff', cardOp: 0.12, cardStroke: theme.soft, footer: theme.soft },
+		light: { fg: theme.bg1, kicker: theme.bg2, hi: theme.bg2, accent: theme.bg2, onAccent: '#ffffff', ctaFill: theme.bg2, ctaText: '#ffffff', cardFill: '#ffffff', cardOp: 1, cardStroke: theme.bg2, footer: theme.bg1 },
+		solid: { fg: '#ffffff', kicker: theme.accent, hi: theme.accent, accent: theme.accent, onAccent: theme.ink, ctaFill: theme.accent, ctaText: theme.ink, cardFill: '#ffffff', cardOp: 0.16, cardStroke: theme.accent, footer: theme.accent },
+		warm: { fg: theme.ink, kicker: theme.bg1, hi: theme.bg1, accent: theme.bg2, onAccent: '#ffffff', ctaFill: theme.ink, ctaText: '#ffffff', cardFill: '#ffffff', cardOp: 0.7, cardStroke: theme.bg2, footer: theme.bg1 },
+	};
+	return { style, ...looks[style] };
+}
+
+function canvas(s, theme, inner) {
+	const backgrounds = {
+		dark: `<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${theme.bg1}"/><stop offset="1" stop-color="${theme.bg2}"/></linearGradient><radialGradient id="glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffffff" stop-opacity="0.18"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient></defs>
+<rect width="${W}" height="${H}" fill="url(#bg)"/><circle cx="880" cy="140" r="260" fill="url(#glow)"/><circle cx="90" cy="1330" r="300" fill="url(#glow)"/>`,
+		light: `<rect width="${W}" height="${H}" fill="#f7f7fb"/><rect width="${W}" height="24" fill="${theme.bg2}"/><circle cx="40" cy="120" r="160" fill="${theme.bg2}" opacity="0.06"/><circle cx="960" cy="1460" r="220" fill="${theme.bg2}" opacity="0.06"/>`,
+		solid: `<rect width="${W}" height="${H}" fill="${theme.bg2}"/><circle cx="930" cy="170" r="420" fill="${theme.bg1}" opacity="0.32"/><circle cx="60" cy="1380" r="480" fill="${theme.bg1}" opacity="0.28"/>`,
+		warm: `<rect width="${W}" height="${H}" fill="${theme.soft}"/><circle cx="930" cy="150" r="320" fill="${theme.bg2}" opacity="0.14"/><circle cx="50" cy="1370" r="380" fill="${theme.bg2}" opacity="0.1"/>`,
+	};
+	return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+${backgrounds[s.style]}
+${inner}
+<text x="${W / 2}" y="1440" text-anchor="middle" font-family="${FONT}" font-size="32" fill="${s.footer}" opacity="0.8">${SITE_LABEL}</text>
+</svg>`;
+}
+
+const kick = (s, text, y = 150) =>
+	`<text x="${W / 2}" y="${y}" text-anchor="middle" font-family="${FONT}" font-size="38" font-weight="700" letter-spacing="6" fill="${s.kicker}">${esc(text.toUpperCase())}</text>`;
+
+function cta(s, text, y = 1250) {
+	const { lines, size } = fit(text, { size: 46, minSize: 32, maxWidth: 660, maxLines: 1 });
+	return `<rect x="130" y="${y}" width="740" height="110" rx="55" fill="${s.ctaFill}"/>
+<text x="${W / 2}" y="${y + 55 + size * 0.35}" text-anchor="middle" font-family="${FONT}" font-size="${size}" font-weight="700" fill="${s.ctaText}">${esc(lines[0])}</text>`;
+}
+
+function chip(s, text, y) {
+	const t = fit(text, { size: 38, minSize: 26, maxLines: 1, maxWidth: 760 });
+	const width = Math.min(860, textWidth(t.lines[0], t.size, true) + 90);
+	return `<rect x="${(W - width) / 2}" y="${y}" width="${width}" height="80" rx="40" fill="${s.cardFill}" fill-opacity="${s.cardOp}" stroke="${s.hi}" stroke-width="3"/>
+<text x="${W / 2}" y="${y + 40 + t.size * 0.35}" text-anchor="middle" font-family="${FONT}" font-size="${t.size}" font-weight="700" fill="${s.fg}">${esc(t.lines[0])}</text>`;
+}
+
+function cardRect(s, x, y, w, h) {
+	return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="26" fill="${s.cardFill}" fill-opacity="${s.cardOp}" stroke="${s.cardStroke}" stroke-opacity="0.3" stroke-width="3"/>`;
+}
+
+function dTip(post, theme, spec) {
+	const s = skin(spec.style, theme);
+	const { items, details } = post.list;
+	const i = spec.i % items.length;
+	const t = fitw('tip title', items[i], { size: 104, minSize: 64, maxLines: 3 });
+	const tb = textBlock(t.lines, { y: 490, size: t.size, fill: s.fg });
+	const d = fitw('tip detail', details[i] || '', { size: 46, minSize: 34, maxLines: 4, bold: false, maxWidth: 800 });
+	const db = d.lines.length ? textBlock(d.lines, { y: tb.bottom + 115, size: d.size, fill: s.fg, bold: false, lineHeight: 1.35 }) : { svg: '', bottom: tb.bottom };
+	const moreY = db.bottom + 200;
+	const more = moreY < 1210
+		? `<rect x="150" y="${db.bottom + 100}" width="700" height="2" fill="${s.hi}" opacity="0.35"/>
+<text x="${W / 2}" y="${moreY}" text-anchor="middle" font-family="${FONT}" font-size="44" font-weight="700" fill="${s.hi}">+ ${items.length - 1} more tips in the full guide</text>`
+		: '';
+	return canvas(s, theme, `${kick(s, `Tip #${i + 1} of ${items.length}`)}
+<circle cx="${W / 2}" cy="290" r="70" fill="${s.accent}"/>
+<text x="${W / 2}" y="318" text-anchor="middle" font-family="${FONT}" font-size="78" font-weight="700" fill="${s.onAccent}">${i + 1}</text>
+${tb.svg}
+${db.svg}
+${more}
+${cta(s, `Get all ${items.length} tips →`)}`);
+}
+
+function dFact(post, theme, spec) {
+	const s = skin(spec.style, theme);
+	const { items, details } = post.list;
+	const i = spec.i % items.length;
+	const sentence = details[i] || items[i];
+	let size = 72;
+	let lines = wrap(sentence, size, 820, true);
+	while (size > 44 && (lines.length - 1) * size * 1.3 > 380) {
+		size -= 4;
+		lines = wrap(sentence, size, 820, true);
+	}
+	if ((lines.length - 1) * size * 1.3 > 380) console.warn(`  ⚠ fact is too long for the pin: ${sentence.slice(0, 70)}`);
+	const fb = textBlock(lines, { y: 610, size, fill: s.fg, lineHeight: 1.3 });
+	return canvas(s, theme, `${kick(s, 'Did you know?')}
+<text x="${W / 2}" y="470" text-anchor="middle" font-family="Georgia, serif" font-size="380" font-weight="700" fill="${s.accent}" opacity="0.5">“</text>
+${fb.svg}
+${chip(s, items[i], fb.bottom + 100)}
+${cta(s, 'Read the full guide →')}`);
+}
+
+function dQuestion(post, theme, spec) {
+	const s = skin(spec.style, theme);
+	const qs = post.allQuestions;
+	const q = qs[spec.i % qs.length];
+	const t = fitw('question', q, { size: 112, minSize: 66, maxLines: 6 });
+	const blockH = (t.lines.length - 1) * t.size * 1.15;
+	const tb = textBlock(t.lines, { y: 690 - blockH / 2, size: t.size, fill: s.fg });
+	return canvas(s, theme, `${kick(s, 'Honest answer inside')}
+<g font-family="${FONT}" font-weight="700" fill="${s.accent}" opacity="0.16"><text x="70" y="1090" font-size="300">?</text><text x="760" y="990" font-size="220">?</text><text x="430" y="1170" font-size="150">?</text></g>
+${tb.svg}
+${chip(s, post.product, tb.bottom + 110)}
+${cta(s, 'Get the answer →')}`);
+}
+
+function dChecklist(post, theme, spec) {
+	const s = skin(spec.style, theme);
+	const { items, heading } = post.list;
+	const t = fitw('checklist title', heading, { size: 80, minSize: 54, maxLines: 3 });
+	const tb = textBlock(t.lines, { y: 290, size: t.size, fill: s.fg });
+	const shown = items.slice(0, 7);
+	let y = tb.bottom + 125;
+	const prepared = shown.map((item) => fitw('checklist item', item, { size: 44, minSize: 34, maxLines: 2, maxWidth: 700 }));
+	const advance = (r) => 96 + (r.lines.length - 1) * r.size * 1.1;
+	const total = prepared.slice(0, -1).reduce((sum, r) => sum + advance(r), 0);
+	const scale = Math.min(1, (1190 - y) / total);
+	const rows = prepared.map((r) => {
+		const lineGap = r.size * 1.1;
+		const first = y - ((r.lines.length - 1) * lineGap) / 2;
+		const row = `<rect x="110" y="${y - 40}" width="54" height="54" rx="14" fill="none" stroke="${s.accent}" stroke-width="6"/>
+<path d="M122 ${y - 12}l12 12 20-26" fill="none" stroke="${s.accent}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+${textBlock(r.lines, { x: 195, y: first, size: r.size, fill: s.fg, anchor: 'start', lineHeight: 1.1 }).svg}`;
+		y += advance(r) * scale;
+		return row;
+	});
+	return canvas(s, theme, `${kick(s, 'Save this checklist')}
+${tb.svg}
+${rows.join('\n')}
+${cta(s, 'Get the full guide →')}`);
+}
+
+function dSkip(post, theme, spec) {
+	const s = skin(spec.style, theme);
+	const t = fitw('skip title', `Who Should Skip ${keep(post.product)}?`, { size: 104, minSize: 66, maxLines: 3 });
+	const tb = textBlock(t.lines, { y: 310, size: t.size, fill: s.fg });
+	let y = tb.bottom + 150;
+	const rows = post.fit.no.slice(0, 3).map((item) => {
+		const all = wrap(`You ${item.charAt(0).toLowerCase()}${item.slice(1)}`, 42, 680, false);
+		if (all.length > 3) console.warn(`  ⚠ skip line is too long for the pin, shorten it: ${item}`);
+		const lines = all.slice(0, 3);
+		const row = `<circle cx="150" cy="${y - 14}" r="32" fill="#dc2626"/>
+<path d="M138 ${y - 26}l24 24M162 ${y - 26}l-24 24" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+${textBlock(lines, { x: 215, y, size: 42, fill: s.fg, bold: false, anchor: 'start', lineHeight: 1.25 }).svg}`;
+		y += 125 + (lines.length - 1) * 52;
+		return row;
+	});
+	const note = y + 30 < 1190
+		? `<text x="${W / 2}" y="${y + 30}" text-anchor="middle" font-family="${FONT}" font-size="42" font-weight="700" fill="${s.hi}">Is that you? Read before you decide.</text>`
+		: '';
+	return canvas(s, theme, `${kick(s, 'Read before you buy')}
+${tb.svg}
+${rows.join('\n')}
+${note}
+${cta(s, 'Check the full review →')}`);
+}
+
+function dCompare(post, theme, spec) {
+	const s = skin(spec.style, theme);
+	const t = fitw('compare title', `${keep(post.product)}: Good Fit or Skip?`, { size: 92, minSize: 60, maxLines: 3 });
+	const tb = textBlock(t.lines, { y: 300, size: t.size, fill: s.fg });
+	const startY = tb.bottom + 130;
+	const lower = (item) => `${item.charAt(0).toLowerCase()}${item.slice(1)}`;
+	const build = (size, bullets) => {
+		let y = startY;
+		const section = (label, color, good, items) => {
+			let out = `<circle cx="125" cy="${y - 14}" r="32" fill="${color}"/>`;
+			out += good
+				? `<path d="M110 ${y - 14}l10 10 19-21" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>`
+				: `<path d="M113 ${y - 26}l24 24M137 ${y - 26}l-24 24" stroke="#fff" stroke-width="7" stroke-linecap="round"/>`;
+			out += `<text x="185" y="${y}" font-family="${FONT}" font-size="46" font-weight="700" fill="${color}">${esc(label)}</text>`;
+			y += 80;
+			for (const item of items.slice(0, bullets)) {
+				const lines = wrap(lower(item), size, 740, false).slice(0, 2);
+				out += `<circle cx="140" cy="${y - 12}" r="8" fill="${s.fg}" opacity="0.7"/>${textBlock(lines, { x: 175, y, size, fill: s.fg, bold: false, anchor: 'start', lineHeight: 1.25 }).svg}`;
+				y += size * 1.9 + (lines.length - 1) * size * 1.25;
+			}
+			return out;
+		};
+		const good = section('Good fit if you…', '#16a34a', true, post.fit.yes);
+		y += 40;
+		const skip = section('Skip it if you…', '#dc2626', false, post.fit.no);
+		return { good, skip, end: y };
+	};
+	const options = [[40, 2], [36, 2], [34, 2], [36, 1]];
+	let layout = build(...options[0]);
+	for (const option of options) {
+		layout = build(...option);
+		if (layout.end <= 1190) break;
+	}
+	if (layout.end > 1210) console.warn('  ⚠ the compare pin is crowded, shorten the "Who is it for" bullets');
+	return canvas(s, theme, `${kick(s, 'Quick comparison')}
+${tb.svg}
+${layout.good}
+${layout.skip}
+${cta(s, 'See the full breakdown →')}`);
+}
+
+function dIngredients(post, theme, spec) {
+	const s = skin(spec.style, theme);
+	const off = spec.offset || 0;
+	const shown = post.ingredients.slice(off, off + 4);
+	const rest = post.ingredients.length - off - shown.length;
+	const heading = off ? `More Ingredients in ${keep(post.product)}` : `What's Inside ${keep(post.product)}?`;
+	const t = fitw('ingredients title', heading, { size: 96, minSize: 60, maxLines: 3 });
+	const tb = textBlock(t.lines, { y: 310, size: t.size, fill: s.fg });
+	let y = tb.bottom + 90;
+	const rows = shown.map((item, k) => {
+		const r = fitw('ingredient', item, { size: 46, minSize: 32, maxLines: 2, maxWidth: 650 });
+		const lineGap = r.size * 1.15;
+		const h = 84 + (r.lines.length - 1) * lineGap;
+		const firstBaseline = y + h / 2 - ((r.lines.length - 1) * lineGap) / 2 + r.size * 0.35;
+		const row = `${cardRect(s, 90, y, 820, h)}
+<circle cx="155" cy="${y + h / 2}" r="31" fill="${s.accent}"/>
+<text x="155" y="${y + h / 2 + 12}" text-anchor="middle" font-family="${FONT}" font-size="34" font-weight="700" fill="${s.onAccent}">${off + k + 1}</text>
+${textBlock(r.lines, { x: 220, y: firstBaseline, size: r.size, fill: s.fg, anchor: 'start', lineHeight: 1.15 }).svg}`;
+		y += h + 24;
+		return row;
+	});
+	const more = rest > 0
+		? `<text x="${W / 2}" y="${y + 55}" text-anchor="middle" font-family="${FONT}" font-size="42" font-weight="700" fill="${s.hi}">+ more ingredients in the full guide</text>`
+		: '';
+	return canvas(s, theme, `${kick(s, 'Read the label')}
+${tb.svg}
+${rows.join('\n')}
+${more}
+${cta(s, 'See the full list →')}`);
+}
+
+function dGuarantee(post, theme, spec) {
+	const s = skin(spec.style, theme);
+	const t = fitw('guarantee title', 'Money-Back Guarantee', { size: 96, minSize: 60, maxLines: 2 });
+	const tb = textBlock(t.lines, { y: 1000, size: t.size, fill: s.fg });
+	const sub = fitw('guarantee text', `What ${post.product} promises, and what to check before you buy`, { size: 44, minSize: 34, maxLines: 3, bold: false, maxWidth: 780 });
+	const sb = textBlock(sub.lines, { y: tb.bottom + 90, size: sub.size, fill: s.fg, bold: false, lineHeight: 1.3 });
+	return canvas(s, theme, `${kick(s, 'Try it risk-free?')}
+<circle cx="${W / 2}" cy="580" r="262" fill="none" stroke="${s.accent}" stroke-width="6" stroke-dasharray="14 12" opacity="0.75"/>
+<circle cx="${W / 2}" cy="580" r="222" fill="${s.accent}"/>
+<text x="${W / 2}" y="640" text-anchor="middle" font-family="${FONT}" font-size="250" font-weight="700" fill="${s.onAccent}">${post.guaranteeDays}</text>
+<text x="${W / 2}" y="716" text-anchor="middle" font-family="${FONT}" font-size="60" font-weight="700" letter-spacing="10" fill="${s.onAccent}">DAYS</text>
+${tb.svg}
+${sb.svg}
+${cta(s, 'Read how it works →')}`);
+}
+
+function dPrice(post, theme, spec) {
+	const s = skin(spec.style, theme);
+	const { price, note } = post.priceInfo;
+	const t = fitw('price title', `How Much Is ${keep(post.product)}?`, { size: 100, minSize: 64, maxLines: 3 });
+	const tb = textBlock(t.lines, { y: 320, size: t.size, fill: s.fg });
+	const p = fit(price, { size: 260, minSize: 110, maxLines: 1, maxWidth: 840 });
+	const py = tb.bottom + 300;
+	const pb = textBlock(p.lines, { y: py, size: p.size, fill: s.hi });
+	let extra = '';
+	let below = py;
+	if (note) {
+		const n = fitw('price note', note, { size: 46, minSize: 34, maxLines: 3, bold: false, maxWidth: 780 });
+		const nb = textBlock(n.lines, { y: py + 95, size: n.size, fill: s.fg, bold: false, lineHeight: 1.3 });
+		extra += nb.svg;
+		below = nb.bottom;
+	}
+	if (post.guaranteeDays) extra += chip(s, `${post.guaranteeDays}-day money-back guarantee`, below + 80);
+	return canvas(s, theme, `${kick(s, 'The real price')}
+${tb.svg}
+${pb.svg}
+${extra}
+${cta(s, 'See what you get →')}`);
+}
+
+function dBignum(post, theme, spec) {
+	const s = skin(spec.style, theme);
+	const { heading, items } = post.list;
+	const m = heading.match(/^(\d+)\s+(.+)$/);
+	const num = m ? m[1] : String(items.length);
+	const rest = m ? m[2] : heading;
+	const r = fitw('big number text', rest, { size: 92, minSize: 58, maxLines: 3 });
+	const rb = textBlock(r.lines, { y: 850, size: r.size, fill: s.fg });
+	const tease = rb.bottom + 110 < 1200
+		? `<text x="${W / 2}" y="${rb.bottom + 110}" text-anchor="middle" font-family="${FONT}" font-size="44" fill="${s.fg}" opacity="0.85">Which one will you try first?</text>`
+		: '';
+	return canvas(s, theme, `${kick(s, 'Free and simple')}
+<text x="${W / 2}" y="700" text-anchor="middle" font-family="${FONT}" font-size="520" font-weight="700" fill="${s.accent}">${esc(num)}</text>
+${rb.svg}
+${tease}
+${cta(s, `See all ${num} →`)}`);
+}
+
+function dPair(post, theme, spec) {
+	const s = skin(spec.style, theme);
+	const { items, details } = post.list;
+	const t = fitw('pair title', '2 Quick Wins You Can Start Today', { size: 88, minSize: 56, maxLines: 2 });
+	const tb = textBlock(t.lines, { y: 270, size: t.size, fill: s.fg });
+	let y = tb.bottom + 80;
+	const cards = [spec.i, spec.i + 1].map((raw) => {
+		const idx = raw % items.length;
+		const ti = fitw('pair tip', items[idx], { size: 52, minSize: 38, maxLines: 2, maxWidth: 690 });
+		const tbk = textBlock(ti.lines, { x: 225, y: y + 82, size: ti.size, fill: s.fg, anchor: 'start', lineHeight: 1.15 });
+		const di = fitw('pair detail', details[idx] || '', { size: 38, minSize: 30, maxLines: 3, bold: false, maxWidth: 690 });
+		const dbk = di.lines.length ? textBlock(di.lines, { x: 225, y: tbk.bottom + 62, size: di.size, fill: s.fg, bold: false, anchor: 'start', lineHeight: 1.3 }) : { svg: '', bottom: tbk.bottom };
+		const h = dbk.bottom + 52 - y;
+		const out = `${cardRect(s, 70, y, 860, h)}
+<circle cx="145" cy="${y + 66}" r="40" fill="${s.accent}"/>
+<text x="145" y="${y + 80}" text-anchor="middle" font-family="${FONT}" font-size="42" font-weight="700" fill="${s.onAccent}">${idx + 1}</text>
+${tbk.svg}
+${dbk.svg}`;
+		y += h + 36;
+		return out;
+	});
+	if (y > 1190) console.warn('  ⚠ the pair pin is crowded, shorten the tip text');
+	const more = y + 60 < 1210
+		? `<text x="${W / 2}" y="${y + 55}" text-anchor="middle" font-family="${FONT}" font-size="42" font-weight="700" fill="${s.hi}">+ ${items.length - 2} more tips in the full guide</text>`
+		: '';
+	return canvas(s, theme, `${kick(s, 'Quick tips')}
+${tb.svg}
+${cards.join('\n')}
+${more}
+${cta(s, 'Get all the tips →')}`);
+}
+
+function dSteps(post, theme, spec) {
+	const s = skin(spec.style, theme);
+	const { items } = post.list;
+	const t = fitw('steps title', 'Start With These 3 Steps', { size: 96, minSize: 60, maxLines: 2 });
+	const tb = textBlock(t.lines, { y: 300, size: t.size, fill: s.fg });
+	let y = tb.bottom + 190;
+	const rows = [0, 1, 2].map((k) => {
+		const idx = (spec.i + k) % items.length;
+		const r = fitw('step', items[idx], { size: 54, minSize: 36, maxLines: 2, maxWidth: 640 });
+		const lineGap = r.size * 1.15;
+		const baseline = y - ((r.lines.length - 1) * lineGap) / 2 + r.size * 0.35;
+		const connector = k < 2 ? `<path d="M150 ${y + 52}V${y + 148}" stroke="${s.accent}" stroke-width="6" stroke-dasharray="4 14" stroke-linecap="round"/>` : '';
+		const row = `${connector}<circle cx="150" cy="${y}" r="48" fill="${s.accent}"/>
+<text x="150" y="${y + 18}" text-anchor="middle" font-family="${FONT}" font-size="52" font-weight="700" fill="${s.onAccent}">${k + 1}</text>
+${textBlock(r.lines, { x: 235, y: baseline, size: r.size, fill: s.fg, anchor: 'start', lineHeight: 1.15 }).svg}`;
+		y += 200;
+		return row;
+	});
+	const more = `<text x="${W / 2}" y="${y - 20}" text-anchor="middle" font-family="${FONT}" font-size="42" font-weight="700" fill="${s.hi}">+ ${items.length - 3} more in the full guide</text>`;
+	return canvas(s, theme, `${kick(s, 'Start here')}
+${tb.svg}
+${rows.join('\n')}
+${y - 20 < 1200 ? more : ''}
+${cta(s, 'See every step →')}`);
+}
+
+function dHook(post, theme, spec) {
+	const s = skin(spec.style, theme);
+	const hook = post.pins.hook || post.hookTitle;
+	const t = fitw('hook', hook, { size: 112, minSize: 60, maxLines: 7 });
+	const blockH = (t.lines.length - 1) * t.size * 1.15;
+	const tb = textBlock(t.lines, { y: 660 - blockH / 2, size: t.size, fill: s.fg });
+	const label = /review/i.test(post.slug) ? 'Honest review' : 'Free guide';
+	return canvas(s, theme, `${kick(s, label)}
+${tb.svg}
+${chip(s, post.product, tb.bottom + 110)}
+${cta(s, 'Read the full post →')}`);
+}
+
+const RENDERERS = {
+	spot: dTip,
+	fact: dFact,
+	q: dQuestion,
+	checklist: dChecklist,
+	skip: dSkip,
+	compare: dCompare,
+	ingredients: dIngredients,
+	guarantee: dGuarantee,
+	price: dPrice,
+	bignum: dBignum,
+	pair: dPair,
+	steps: dSteps,
+	hook: dHook,
+};
+
+const RECIPE = [
+	{ type: 'spot', style: 'solid', i: 0 },
+	{ type: 'q', style: 'warm', i: 0 },
+	{ type: 'checklist', style: 'dark' },
+	{ type: 'price', style: 'light' },
+	{ type: 'bignum', style: 'solid' },
+	{ type: 'fact', style: 'dark', i: 3 },
+	{ type: 'skip', style: 'warm' },
+	{ type: 'spot', style: 'light', i: 2 },
+	{ type: 'hook', style: 'solid' },
+	{ type: 'ingredients', style: 'dark', offset: 0, fallback: { type: 'fact', style: 'dark', i: 2 } },
+	{ type: 'q', style: 'light', i: 1 },
+	{ type: 'guarantee', style: 'warm' },
+	{ type: 'pair', style: 'warm', i: 4 },
+	{ type: 'steps', style: 'light', i: 0 },
+	{ type: 'q', style: 'solid', i: 3 },
+	{ type: 'spot', style: 'dark', i: 4 },
+	{ type: 'compare', style: 'light' },
+	{ type: 'spot', style: 'warm', i: 5 },
+	{ type: 'fact', style: 'solid', i: 1 },
+	{ type: 'q', style: 'dark', i: 2 },
+	{ type: 'fact', style: 'warm', i: 6 },
+	{ type: 'q', style: 'light', i: 4 },
+	{ type: 'pair', style: 'solid', i: 2 },
+	{ type: 'ingredients', style: 'dark', offset: 4, fallback: { type: 'q', style: 'dark', i: 1 } },
+];
+
+function resolveSlot(post, entry) {
+	const L = post.list ? post.list.items.length : 0;
+	const available = {
+		spot: L >= 3,
+		fact: L >= 3,
+		checklist: L >= 3,
+		bignum: L >= 3,
+		pair: L >= 4,
+		steps: L >= 4,
+		q: post.allQuestions.length >= 1,
+		skip: !!post.fit && post.fit.no.length >= 1,
+		compare: !!post.fit && post.fit.yes.length >= 1 && post.fit.no.length >= 1,
+		ingredients: post.ingredients.length - (entry.offset || 0) >= 2,
+		price: !!post.priceInfo,
+		guarantee: !!post.guaranteeDays,
+		hook: true,
+	};
+	if (available[entry.type]) return entry;
+	if (entry.fallback) return resolveSlot(post, entry.fallback);
+	console.warn(`  ⚠ ${post.slug}: not enough content for a "${entry.type}" pin, used a headline pin instead`);
+	return { type: 'hook', style: entry.style };
+}
+
+function extraCopy(post, spec) {
+	const p = post.product;
+	const list = post.list;
+	const L = list ? list.items.length : 0;
+	const tip = (i) => list.items[i % L];
+	const detail = (i) => list.details[i % L] || list.items[i % L];
+	switch (spec.type) {
+		case 'spot':
+			return { title: `${titleCase(tip(spec.i))}: ${list.heading}`, description: `${detail(spec.i)} See all ${L} tips in the full guide and save this pin for later!` };
+		case 'fact':
+			return { title: `Did You Know? ${titleCase(tip(spec.i))}`, description: `${detail(spec.i)} Get ${L - 1} more simple tips in the full guide.` };
+		case 'checklist':
+			return { title: `Save This Checklist: ${list.heading}`, description: `Your quick checklist: ${list.items.slice(0, 3).join(', ')} and more. Save this pin and read the full guide for the details.` };
+		case 'bignum':
+			return { title: `${list.heading}: Start Today`, description: `${L} simple, free ideas you can start today. Which one will you try first? Read the full guide.` };
+		case 'pair':
+			return { title: `2 Quick Wins: ${titleCase(tip(spec.i))} + ${titleCase(tip(spec.i + 1))}`, description: `${detail(spec.i)} ${detail(spec.i + 1)} Find ${L - 2} more tips in the full guide.` };
+		case 'steps':
+			return { title: `Start With These 3 Steps: ${list.heading}`, description: `Begin with ${tip(spec.i).toLowerCase()}, ${tip(spec.i + 1).toLowerCase()} and ${tip(spec.i + 2).toLowerCase()}. Then read the full guide for ${L - 3} more ideas.` };
+		case 'q': {
+			const q = post.allQuestions[spec.i % post.allQuestions.length];
+			return { title: `${q} Honest Answer`, description: `${q} We break it down in plain language, with no hype. Read the full post for what to know before you decide.` };
+		}
+		case 'skip':
+			return { title: `Who Should Skip ${p}? Read This First`, description: `Not everyone is a good fit for ${p}. See who should skip it, and what to check before you buy. Full details in the post.` };
+		case 'compare':
+			return { title: `${p}: Good Fit or Skip? Quick Comparison`, description: `See at a glance who ${p} may suit and who should skip it. Read the full post for the details.` };
+		case 'ingredients': {
+			const off = spec.offset || 0;
+			const names = post.ingredients.slice(off, off + 3).map((x) => x.split(',')[0]).join(', ');
+			return {
+				title: off ? `More Ingredients in ${p}: What the Label Says` : `What's Inside ${p}? The Ingredients Explained`,
+				description: `${names} and more. See the full ingredient list, what the research says, and what to know before you buy.`,
+			};
+		}
+		case 'price': {
+			const { price, note } = post.priceInfo;
+			const g = post.guaranteeDays ? ` and the ${post.guaranteeDays}-day money-back guarantee` : '';
+			return { title: `How Much Does ${p} Cost? Price and Guarantee`, description: `${p} is listed at ${price}${note ? ` (${note})` : ''}. See what you get${g}, and who it is for.` };
+		}
+		case 'guarantee':
+			return {
+				title: `${p} ${post.guaranteeDays}-Day Money-Back Guarantee: Read This First`,
+				description: `Thinking about trying ${p}? It comes with a ${post.guaranteeDays}-day money-back guarantee. Read the full post to see what to know before you buy.`,
+			};
+		default:
+			return { title: post.title, description: post.description };
+	}
+}
+
+function slotDesigns(post) {
+	return RECIPE.map((entry) => {
+		const spec = resolveSlot(post, entry);
+		return { type: spec.type, spec, render: (p, t) => RENDERERS[spec.type](p, t, spec), copy: (p) => extraCopy(p, spec) };
+	});
+}
+
+function parseAllQuestions(body) {
+	return [...body.matchAll(/^##\s+(.+\?)\s*$/gm)].map((m) => m[1].trim());
+}
+
+function parseIngredients(body) {
+	const section = body.split(/^##\s+/m).find((x) => /^(what('?s| is) inside|ingredients)/i.test(x));
+	if (!section) return [];
+	return section
+		.split(/\r?\n/)
+		.filter((line) => /^[-*]\s+/.test(line))
+		.map((line) => line.replace(/^[-*]\s+/, '').replace(/\*+|__|_/g, '').replace(/\s*\(.*?\)\s*$/, '').trim())
+		.filter(Boolean);
+}
+
+function parsePrice(facts, body) {
+	const rx = /\$\d+(?:\.\d{2})?(?:\s*(?:to|-|–)\s*\$\d+(?:\.\d{2})?)?/;
+	const fact = facts.find((f) => /price/i.test(f.label));
+	const source = fact ? fact.value : (body.match(/[^.\n]*\$\d+[^.\n]*/) || [''])[0];
+	const m = source.match(rx);
+	if (!m) return null;
+	const note = source
+		.slice(source.indexOf(m[0]) + m[0].length)
+		.replace(/^[\s,:;–-]+/, '')
+		.replace(/\s+and\s+comes.*$/i, '')
+		.replace(/^as an?\s+/i, '')
+		.replace(/[,.\s]+$/, '')
+		.trim();
+	return { price: m[0].replace(/\s+/g, ' '), note };
+}
+
+function parseGuaranteeDays(body) {
+	return body.match(/(\d+)[- ]day\s+money[- ]back/i)?.[1];
+}
+
 function cleanItem(raw) {
 	const bold = raw.match(/^\*\*(.+?)\*\*/);
 	const text = (bold ? bold[1] : raw).replace(/\*\*|__|`/g, '').replace(/\[(.+?)\]\(.+?\)/g, '$1');
@@ -457,6 +976,11 @@ export function loadPost(slug) {
 	const facts = parseFacts(content);
 	const priceFact = facts.find((f) => /price/i.test(f.label));
 	return {
+		body: content,
+		allQuestions: parseAllQuestions(content),
+		ingredients: parseIngredients(content),
+		priceInfo: parsePrice(facts, content),
+		guaranteeDays: parseGuaranteeDays(content),
 		slug,
 		title: data.title,
 		description: data.description,
@@ -466,6 +990,7 @@ export function loadPost(slug) {
 		pins: data.pins || {},
 		tags: data.tags || [],
 		pinTheme: data.pinTheme,
+		postNumber: data.postNumber || 1,
 		list: parseList(content),
 		questions: parseQuestions(content),
 		fit: parseFit(content),
@@ -516,7 +1041,8 @@ function pinCopy(post, n) {
 			description: `We checked what ${post.product} claims against what the research actually says. See what we found before you buy.`,
 		},
 	};
-	const c = copies[post.designs[n - 1].type];
+	const d = post.designs[n - 1];
+	const c = d.copy ? d.copy(post) : copies[d.type];
 	return {
 		title: c.title.slice(0, 100),
 		description: `${c.description} #affiliate ${tags}`.trim().slice(0, 500),
@@ -530,12 +1056,6 @@ export function pinTags(post) {
 	return [...post.tags, ...(TAGS[post.category] || [])]
 		.filter((tag) => !seen.has(tag.toLowerCase()) && seen.add(tag.toLowerCase()))
 		.slice(0, 10);
-}
-
-function schedule(offset) {
-	const d = new Date();
-	d.setDate(d.getDate() + offset * 3);
-	return d.toISOString().slice(0, 10);
 }
 
 function designSets(post) {
@@ -553,29 +1073,47 @@ function designSets(post) {
 		post.questions.length >= 3 ? { type: 'questions', render: pinQuestions } : { type: 'verdict', render: pinVerdict },
 		{ type: 'truth', render: pinTruth },
 	];
-	return [set1, set2];
+	const extra = slotDesigns(post);
+	const sets = [set1, set2];
+	for (let k = 0; k < extra.length; k += 4) sets.push(extra.slice(k, k + 4));
+	return sets;
 }
 
-function existingCount(dir) {
-	if (!fs.existsSync(dir)) return 0;
-	return fs.readdirSync(dir).filter((f) => /^\d+\.jpg$/.test(f)).length;
+function productPosts(product) {
+	return fs
+		.readdirSync(BLOG_DIR)
+		.filter((f) => /\.mdx?$/.test(f))
+		.map((f) => ({ file: f, data: matter(fs.readFileSync(path.join(BLOG_DIR, f), 'utf8')).data }))
+		.filter((x) => x.data.product === product)
+		.map((x) => ({ slug: x.file.replace(/\.mdx?$/, ''), number: x.data.postNumber || 1 }))
+		.sort((p, q) => p.number - q.number);
 }
 
-async function generate(slug, setArg) {
-	const post = loadPost(slug);
-	const theme = THEMES[post.pinTheme] || THEMES[post.category] || THEMES['health-fitness'];
-	const outDir = path.join(PINS_DIR, slugify(post.product));
-	const sets = designSets(post);
-	const setNumber = setArg || Math.floor(existingCount(outDir) / 4) + 1;
-	if (setNumber > sets.length) {
-		console.log(`• ${post.product}: all ${sets.length * 4} pin designs already created. Use --set 1 or --set 2 to recreate a set.`);
-		return;
-	}
-	fs.mkdirSync(outDir, { recursive: true });
+function mdHeader(post) {
+	const board = BOARDS[post.category] || 'Smart Picks';
+	const lines = productPosts(post.product).map((p) => {
+		const from = (p.number - 1) * 8 + 1;
+		return `- Pins ${from}-${from + 7}: ${SITE_URL}/blog/${p.slug}/`;
+	});
+	return [
+		`# ${post.product} pins`,
+		'',
+		'Each post gets 8 pins:',
+		'',
+		...lines,
+		'',
+		`Board: **${board}**`,
+		'',
+		"Post about one pin per day for this product, in number order, using Pinterest's scheduler.",
+		'',
+	];
+}
 
+const pinNumber = (part) => Number(part.match(/^## Pin (\d+) /)[1]);
+
+async function generateSet(post, theme, outDir, sets, setNumber) {
 	const designs = sets[setNumber - 1];
 	const first = (setNumber - 1) * 4 + 1;
-	post.designs = sets.flat();
 
 	for (let i = 0; i < designs.length; i++) {
 		await sharp(Buffer.from(designs[i].render(post, theme)), { density: 144 })
@@ -584,20 +1122,10 @@ async function generate(slug, setArg) {
 			.toFile(path.join(outDir, `${first + i}.jpg`));
 	}
 
-	const board = BOARDS[post.category] || 'Smart Picks';
-	const header = [
-		`# ${post.product} pins`,
-		'',
-		`Post: ${SITE_URL}/blog/${post.slug}/`,
-		`Board: **${board}**`,
-		'',
-		"Upload one pin every 3 days (suggested dates below) using Pinterest's scheduler.",
-		'',
-	];
-	const section = [first, first + 1, first + 2, first + 3].flatMap((n, i) => {
+	const section = [first, first + 1, first + 2, first + 3].flatMap((n) => {
 		const c = pinCopy(post, n);
 		return [
-			`## Pin ${n} (${n}.jpg) - post on ${schedule(i)}`,
+			`## Pin ${n} (${n}.jpg)`,
 			'',
 			`**Title:** ${c.title}`,
 			'',
@@ -610,21 +1138,39 @@ async function generate(slug, setArg) {
 		];
 	});
 	const mdFile = path.join(outDir, 'pins.md');
-	if (setNumber === 1 || !fs.existsSync(mdFile)) {
-		fs.writeFileSync(mdFile, [...header, ...section].join('\n'));
-	} else {
-		const existing = fs.readFileSync(mdFile, 'utf8').split(/\n(?=## Pin \d+ )/);
-		const kept = existing.filter((part) => {
-			const m = part.match(/^## Pin (\d+) /);
-			return !m || Number(m[1]) < first || Number(m[1]) > first + 3;
-		});
-		fs.writeFileSync(mdFile, `${kept.join('\n').trimEnd()}\n\n${section.join('\n')}`);
+	let parts = [];
+	if (fs.existsSync(mdFile)) {
+		parts = fs
+			.readFileSync(mdFile, 'utf8')
+			.split(/\n(?=## Pin \d+ )/)
+			.filter((part) => /^## Pin \d+ /.test(part))
+			.filter((part) => pinNumber(part) < first || pinNumber(part) > first + 3);
 	}
+	parts.push(section.join('\n'));
+	parts.sort((x, y) => pinNumber(x) - pinNumber(y));
+	fs.writeFileSync(mdFile, `${mdHeader(post).join('\n')}\n${parts.map((x) => x.trimEnd()).join('\n\n')}\n`);
 
-	console.log(`✔ ${post.product}: pins ${first}-${first + 3} -> ${path.relative(ROOT, outDir)}`);
+	console.log(`✔ ${post.product}: pins ${first}-${first + 3} (post ${post.postNumber}) -> ${path.relative(ROOT, outDir)}`);
+}
+
+async function generate(slug, setArg) {
+	const post = loadPost(slug);
+	const theme = THEMES[post.pinTheme] || THEMES[post.category] || THEMES['health-fitness'];
+	const outDir = path.join(PINS_DIR, slugify(post.product));
+	const sets = designSets(post);
+	post.designs = sets.flat();
+	const wanted = setArg ? [setArg] : [post.postNumber * 2 - 1, post.postNumber * 2];
+	fs.mkdirSync(outDir, { recursive: true });
+	for (const setNumber of wanted) {
+		if (setNumber < 1 || setNumber > sets.length) {
+			console.log(`• ${post.product}: set ${setNumber} does not exist (1 to ${sets.length}).`);
+			continue;
+		}
+		await generateSet(post, theme, outDir, sets, setNumber);
+	}
 	if (!post.list) console.log('  (no numbered list found in the post, used fallback designs)');
-	if (!post.facts.length) console.log('  (no quick verdict box found, the verdict pin shows fewer facts)');
-	if (setNumber === 2 && !post.fit) console.log('  (no "Who is it for" section found, used a fallback design)');
+	if (!post.facts.length && post.postNumber === 1) console.log('  (no quick verdict box found, the verdict pin shows fewer facts)');
+	if (post.postNumber === 1 && !post.fit) console.log('  (no "Who is it for" section found, used a fallback design)');
 }
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);

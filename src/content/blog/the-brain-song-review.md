@@ -5,6 +5,7 @@ pubDate: '2026-10-03'
 heroImage: '../../assets/brain-song-hero.jpg'
 category: 'health-fitness'
 product: 'The Brain Song'
+postNumber: 1
 tags: ['Memory improvement', 'Brain health', 'Focus and concentration', 'Mental clarity', 'Brain power']
 ---
 

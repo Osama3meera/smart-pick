@@ -5,6 +5,7 @@ pubDate: '2026-10-06'
 heroImage: '../../assets/prodentim-hero.jpg'
 category: 'health-fitness'
 product: 'ProDentim'
+postNumber: 1
 tags: ['Oral health', 'Dental care', 'Healthy teeth', 'Gum health', 'Probiotics']
 ---
 

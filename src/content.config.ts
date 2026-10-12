@@ -20,6 +20,7 @@ const blog = defineCollection({
 			product: z.string().optional(),
 			tags: z.array(z.string()).optional(),
 			pinTheme: z.string().optional(),
+			postNumber: z.number().int().min(1).max(4).optional(),
 			pins: z
 				.object({
 					hook: z.string().optional(),

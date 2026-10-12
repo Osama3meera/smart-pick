@@ -10,9 +10,9 @@ Every push to `main` deploys automatically.
 | :-- | :-- |
 | `npm run dev` | Preview the site at http://localhost:4321 |
 | `npm run build` | Build the site into `dist/` |
-| `npm run pins <post-name>` | Create the next 4 Pinterest pins for a post (1-4, then 5-8) |
-| `npm run pins <post-name> -- --set 2` | Recreate a specific set of 4 pins |
-| `npm run pins` | Create the next set for every post |
+| `npm run pins <post-name>` | Create the 8 pins for that post (set by `postNumber`) |
+| `npm run pins <post-name> -- --set 3` | Recreate one set of 4 pins |
+| `npm run pins` | Create the pins for every post |
 
 ## Adding a product
 
@@ -42,6 +42,23 @@ Every push to `main` deploys automatically.
 | `pins.md` | Title, description, link with UTM, board, posting dates | All of the above |
 
 Set 1 (pins 1-4) uses a dark background and set 2 (pins 5-8) a light one, so they look different in the feed.
+
+Sets 3 to 8 (pins 9-32) are built from the post's numbered tips, `##` questions, "Who is it for" lists, ingredient list, price and money-back guarantee, in four looks (dark, light, solid color, tinted). Designs: tip spotlight, "did you know" fact, one question, checklist, price, guarantee, big number, two tips, 3 steps, who should skip, good fit vs skip, ingredients, headline.
+
+## Rule: 4 posts and 32 pins per product
+
+Every product has 4 posts, and every post gets 8 pins:
+
+| Post | `postNumber` | Pins |
+| :-- | :-- | :-- |
+| First (the review) | 1 | 1-8 |
+| Second | 2 | 9-16 |
+| Third | 3 | 17-24 |
+| Fourth | 4 | 25-32 |
+
+Set `postNumber: 1` to `4` in each post frontmatter (same `product` value on all four), then run `npm run pins <post-name>` for each post. Each post needs a numbered list of 5 or more tips, 4 or more `##` questions, and a "Who is X for?" section. Give each post its own `/go/<name>` redirect with a unique `tid`.
+
+The generator prints a warning if any text is too long for a pin.
 
 Optional overrides in the post frontmatter:
 
